@@ -5,32 +5,51 @@ const assert = require('assert');
 describe('ObjDescParser', () => {
     let context, user;
     beforeEach(() => {
-        user = {name: "Turing"};
+        user = {name: "Turing", knowledge: {fusca: {classification: {car: {}}}}};
         context = {user: user};
         context.words_path = require('../src/pt-br.js');
     });
-    it('transforma "eu tenho um fusca" em json', () => {
-        let res = parser("eu tenho um fusca", context);
+
+    test("eu tenho um fusca", (res) => {
         assert.deepEqual(res, {target: "user.inventory", value: {name: "fusca"}});
     });
-    it('transforma "eu tenho uma caneta" em json', () => {
-        let res = parser("eu tenho uma caneta", context);
+
+    test("eu tenho uma caneta", (res) => {
         assert.deepEqual(res, {target: "user.inventory", value: {name: "caneta"}});
     });
-    it('transforma "meu fusca é creme" em json', () => {
-        let res = parser("meu fusca é creme", context);
+    
+    test("meu fusca é creme", (res) => {
         assert.deepEqual(res, {target: "user.inventory.fusca.color", value: {name: "creme"}});
     });
-    it('transforma "meu coelho é branco" em json', () => {
-        let res = parser("meu coelho é branco", context);
+
+    test("meu coelho é branco", (res) => {
         assert.deepEqual(res, {target: "user.inventory.coelho.color", value: {name: "branco"}});
     });
-    it('transforma "meu fusca é 1500" em json', () => {
-        let res = parser("meu fusca é 1500", context);
+    
+    test("meu fusca é 1500", (res) => {
         assert.deepEqual(res, {target: "user.inventory.fusca.engine", value: {name: "1500"}});
     });
-    it('transforma "o meu fusca é 1500" em json', () => {
-        let res = parser("o meu fusca é 1500", context);
+    
+    test("o meu fusca é 1500", (res) => {
         assert.deepEqual(res, {target: "user.inventory.fusca.engine", value: {name: "1500"}});
     });
+
+    test("a minha caneta é azul", (res) => {
+        assert.deepEqual(res, {target: "user.inventory.caneta.color", value: {name: "azul"}});
+    });
+
+    test("a minha mochila é preta e vermelha", (res) => {
+        assert.deepEqual(res, {target: "user.inventory.mochila.color", value: {name: "preta"}});
+    });
+
+    function test(phrase, callback) {
+        it('transforma "' + phrase + '" em json', (done) => {
+            parser(phrase, context).then(res => {
+                callback(res);
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+    }
 });
