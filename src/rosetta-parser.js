@@ -27,16 +27,15 @@ module.exports = function parse(text, context) {
         if (i < tokens.length) {
             let next_token = tokens[i+1];
             let current_token = tokens[i];
-            console.log('current_token', current_token);
-            let current = acurrent[current_token];
-            if (!current) {
+            let next_current = acurrent[current_token];
+            if (!next_current) {
                 console.log('sem', current_token, 'em', acurrent);
             }
-            if (typeof current === 'function') {
-                forContext(tokens, i + 2, current(text, next_token, context), resolve, reject);
+            if (typeof next_current === 'function') {
+                forContext(tokens, i + 2, next_current(text, next_token, context), resolve, reject);
             }
             else {
-                forContext(tokens, i + 1, current, resolve, reject);
+                forContext(tokens, i + 1, next_current, resolve, reject);
             }
         } else {
             resolve(acurrent);

@@ -1,14 +1,25 @@
 "use strict";
-const parser = require('../src/obj-desc-parser.js');
+const parser = require('../src/rosetta-parser.js');
 const assert = require('assert');
 
-describe('ObjDescParser', () => {
+describe('RosettaParser', () => {
     let context, user;
     beforeEach(() => {
         user = {name: "Turing", knowledge: {fusca: {classification: {car: {}}}}};
         context = {user: user};
-        context.words_path = require('../src/pt-br.js');
+        context.words_path = require('../src/dic-desc.pt-br.js');
     });
+
+    function test(phrase, callback) {
+        it('transforma "' + phrase + '" em json', (done) => {
+            parser(phrase, context).then(res => {
+                callback(res);
+                done();
+            }).catch(err => {
+                done(err);
+            });
+        });
+    }
 
     test("eu tenho um fusca", (res) => {
         assert.deepEqual(res, {target: "user.inventory", value: {name: "fusca"}});
@@ -38,18 +49,9 @@ describe('ObjDescParser', () => {
         assert.deepEqual(res, {target: "user.inventory.caneta.color", value: {name: "azul"}});
     });
 
-    test("a minha mochila é preta e vermelha", (res) => {
-        assert.deepEqual(res, {target: "user.inventory.mochila.color", value: {name: "preta"}});
+    test("a minha mochila é branca e preta", (res) => {
+        assert.deepEqual(res, {target: "user.inventory.mochila.color", value: {name: "branca"}});
     });
 
-    function test(phrase, callback) {
-        it('transforma "' + phrase + '" em json', (done) => {
-            parser(phrase, context).then(res => {
-                callback(res);
-                done();
-            }).catch(err => {
-                done(err);
-            });
-        });
-    }
+    
 });

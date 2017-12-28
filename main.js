@@ -23,7 +23,7 @@ function createWindow () {
   }))
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -58,3 +58,7 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+//var uri = "mongodb+srv://kay:myRealPassword@cluster0-wpeiv.mongodb.net/test";
+var uri = "mongodb://client:s89hvHF3yE4B@cluster0-shard-00-00-7iobj.mongodb.net:27017,cluster0-shard-00-01-7iobj.mongodb.net:27017,cluster0-shard-00-02-7iobj.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin"
+
